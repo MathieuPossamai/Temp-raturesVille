@@ -1,11 +1,4 @@
-<form method="post" action="affichage_temperature.php">
-<select name="ville">
-      <option value="lyon">Lyon</option>
-      <option value="meylan">Meylan</option>
-      <option value="paris">Paris</option>
-	  <option value="grenoble">Grenoble</option>
-</select>
-<input type="s<?php
+<?php
 try
 {
     $bdd = new PDO('mysql:host=localhost;dbname=bdd_temperaturevilles', 'root', '');
@@ -24,6 +17,4 @@ $liste_villes = $bdd->query('SELECT ville FROM temperaturevilles');
 <?php } ?>
 </select>
 <input type="submit" value="Avoir la temperature"/>
-</form>
-ubmit" value="Avoir la temperature"/>
 </form>
