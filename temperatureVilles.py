@@ -11,6 +11,20 @@ import mysql.connector
 import time
 # Fonctions
 
+def get_villes():
+    cnx = mysql.connector.connect(user='root', password='', host='127.0.0.1', database='bdd_temperaturevilles')
+    cursor = cnx.cursor()
+    cursor.execute("SELECT ville FROM temperaturevilles")
+    result = cursor.fetchall()
+    cnx.commit()
+    cursor.close()
+    cnx.close()
+    list_villes = []
+
+    for ville in result:
+        list_villes += ville
+
+    return list_villes
 
 def get_temperature(ville):
     url="http://api.openweathermap.org/data/2.5/weather?q="+ville+",fr&units=metric&lang=fr&appid=0a73790ec47f53b9e1f2e33088a0f7d0"
@@ -30,7 +44,8 @@ def set_temperature_bdd(ville, temperature):
 
 
 def main():
-    list_villes = ["lyon", "meylan", "paris", "grenoble"]
+    list_villes = get_villes()
+    print("Liste des villes :",list_villes)
     while 1:
         print("refresh...")
         for ville in list_villes:
