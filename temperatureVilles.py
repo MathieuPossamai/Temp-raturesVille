@@ -27,15 +27,19 @@ def get_villes():
     return list_villes
 
 def get_temperature(ville):
-    url="http://api.openweathermap.org/data/2.5/weather?q="+ville+",fr&units=metric&lang=fr&appid=0a73790ec47f53b9e1f2e33088a0f7d0"
+    url = "http://api.openweathermap.org/data/2.5/weather?q="+ville+",fr&units=metric&lang=fr&appid=0a73790ec47f53b9e1f2e33088a0f7d0"
     return float(requests.get(url).json()['main']['temp'])
 
+def get_pression(ville):
+    url = "http://api.openweathermap.org/data/2.5/weather?q="+ville+",fr&units=metric&lang=fr&appid=0a73790ec47f53b9e1f2e33088a0f7d0"
+    return float(requests.get(url).json()['main']['pressure'])
 
-def set_temperature_bdd(ville, temperature):
+
+def set_temperature_bdd(ville, temperature, pression):
     cnx = mysql.connector.connect(user='root', password='', host='127.0.0.1', database='bdd_temperaturevilles')
     cursor = cnx.cursor()
-    update_val = ("UPDATE temperaturevilles SET temperature = (%s) WHERE ville = (%s)")
-    data = (temperature, ville)
+    update_val = ("UPDATE temperaturevilles SET temperature = (%s), pression = (%s) WHERE ville = (%s)")
+    data = (temperature, pression, ville)
     cursor.execute(update_val, data)
     cnx.commit()
     cursor.close()
@@ -45,11 +49,11 @@ def set_temperature_bdd(ville, temperature):
 
 def main():
     list_villes = get_villes()
-    print("Liste des villes :",list_villes)
+    print("Liste des villes :", list_villes)
     while 1:
         print("refresh...")
         for ville in list_villes:
-            set_temperature_bdd(ville, get_temperature(ville))
+            set_temperature_bdd(ville, get_temperature(ville), get_pression(ville))
         print("Done !")
         time.sleep(300)
 

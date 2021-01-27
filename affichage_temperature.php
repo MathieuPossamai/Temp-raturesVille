@@ -11,8 +11,9 @@ catch(Exception $e)
 {
         die('Erreur : '.$e->getMessage());
 }
+
 $bdd->query('SET lc_time_names = "fr_FR"');
-$req = $bdd->prepare('SELECT temperature, DATE_FORMAT(last_update, "Le %d %M %Y à %H:%i") AS last_update FROM temperaturevilles WHERE ville = ?');
+$req = $bdd->prepare('SELECT temperature, pression, DATE_FORMAT(last_update, "Le %d %M %Y à %H:%i") AS last_update FROM temperaturevilles WHERE ville = ?');
 $req->execute(array($ville));
 $donnees = $req->fetch();
 
@@ -20,7 +21,9 @@ echo ($donnees['last_update']);
 ?>
  il faisait
 <?=$donnees['temperature']?>
- °C à 
+ °C et la pression était de
+<?=$donnees['pression']?> 
+ hPa à 
 <?php
 echo ucfirst($ville);
 $req->closeCursor();
